@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("Welcome to backend API...");
+  res.send("Welcome to  API..");
 });
 app.get("/products", (req, res) => {
   res.send(products);
