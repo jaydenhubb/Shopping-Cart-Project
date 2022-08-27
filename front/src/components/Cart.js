@@ -1,8 +1,34 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
+import { clearCart, decrement, increment, remoove, getTotal } from "../features/cartSlice";
+import { useEffect } from "react";
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
+
+  const dispatch = useDispatch();
+
+
+  useEffect(()=>{
+    dispatch(getTotal())
+  },
+
+   [dispatch, cart])
+  // click functions
+  const handleRemove = (item) => {
+    dispatch(remoove(item));
+  };
+
+  const handleAdd = (item) => {
+    dispatch(increment(item));
+  };
+  const handleDecrease = (item) => {
+    dispatch(decrement(item));
+  };
+  const handleClear = (item)=>{
+    dispatch(clearCart(item))
+  }
+
   return (
     <div className="cart-container">
       <h2>Your Cart</h2>
@@ -41,26 +67,38 @@ const Cart = () => {
                   <div>
                     <h5>{cartItem.name}</h5>
                     <p>{cartItem.desc}</p>
-                    <button>Remove</button>
+                    <button
+                      onClick={() => {
+                        handleRemove(cartItem);
+                      }}
+                    >
+                      Remove
+                    </button>
                   </div>
                 </div>
                 <div className="product-price">${cartItem.price}</div>
                 <div className="product-quantity">
                   <svg
+                    onClick={() => {
+                      handleDecrease(cartItem);
+                    }}
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
                     height="16"
                     fill="currentColor"
-                    class="bi bi-dash-lg"
+                    className="bi bi-dash-lg"
                     viewBox="0 0 16 16"
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z"
                     />
                   </svg>
                   <span>{cartItem.quantity}</span>
                   <svg
+                    onClick={() => {
+                      handleAdd(cartItem);
+                    }}
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
                     height="16"
@@ -69,7 +107,7 @@ const Cart = () => {
                     viewBox="0 0 16 16"
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"
                     />
                   </svg>
@@ -81,7 +119,7 @@ const Cart = () => {
             ))}
           </div>
           <div className="summary">
-            <button className="clear-cart">Clear-cart</button>
+            <button className="clear-cart" onClick={()=> handleClear(cart)}>Clear-cart</button>
             <div className="checkout">
               <div className="subtotal">
                 <span>Total</span>
